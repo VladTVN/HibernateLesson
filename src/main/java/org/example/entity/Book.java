@@ -1,10 +1,9 @@
 package org.example.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -16,6 +15,38 @@ public class Book {
 
     private String name;
 
+//    @ManyToOne
+//    private Author author;
+
+    @ManyToMany
+    @JoinTable(name = "book_author", joinColumns = @JoinColumn(name = "author_id"),inverseJoinColumns = @JoinColumn(name = "book_id"))
+    private List<Author> authorList;
+
+    public List<Author> getAuthorList() {
+        return authorList;
+    }
+
+    public void setAuthorList(List<Author> authorList) {
+        this.authorList = authorList;
+    }
+
+    public Book(String name, List<Author> authorList) {
+        this.name = name;
+        this.authorList = authorList;
+    }
+
+    //    public Book(String name, Author author) {
+//        this.name = name;
+//        this.author = author;
+//    }
+
+//    public Author getAuthor() {
+//        return author;
+//    }
+//
+//    public void setAuthor(Author author) {
+//        this.author = author;
+//    }
 
     @Override
     public String toString() {
@@ -29,18 +60,7 @@ public class Book {
         this.name = name;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Book book = (Book) o;
-        return Objects.equals(id, book.id) && Objects.equals(name, book.name);
-    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name);
-    }
 
     public Long getId() {
         return id;
